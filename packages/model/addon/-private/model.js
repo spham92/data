@@ -40,6 +40,13 @@ function getRecordMeta(record) {
   return meta;
 }
 
+function getWithDefault(meta, prop, value) {
+  if (meta[prop] === undefined) {
+    meta[prop] = value;
+  }
+  return get(meta, prop);
+}
+
 const retrieveFromCurrentState = computedMacroWithOptionalParams(function retrieveState() {
   return computed('currentState', function(key) {
     return this._internalModel.currentState[key];
@@ -403,7 +410,7 @@ class Model extends EmberObject.extend(DeprecatedEvented) {
       }
     }
     let meta = getRecordMeta(this);
-    return get(meta, 'isError') || false;
+    return getWithDefault(meta, 'isError', false);
   }
   set isError(v) {
     if (REQUEST_SERVICE && DEBUG) {
@@ -607,7 +614,7 @@ class Model extends EmberObject.extend(DeprecatedEvented) {
       return request.state === 'rejected' && request.response.data;
     }
     let meta = getRecordMeta(this);
-    return get(meta, 'adapterError') || null;
+    return getWithDefault(meta, 'adapterError', null);
   }
   set adapterError(v) {
     if (REQUEST_SERVICE && DEBUG) {
