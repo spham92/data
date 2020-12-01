@@ -2126,29 +2126,6 @@ if (DEPRECATE_EVENTED_API_USAGE) {
   });
 }
 
-if (DEPRECATE_MODEL_DATA) {
-  /**
- @property data
- @private
- @deprecated
- @type {Object}
- */
-  Object.defineProperty(Model.prototype, 'data', {
-    configurable: false,
-    get() {
-      deprecate(
-        `Model.data was private and it's use has been deprecated. For public access, use the RecordData API or iterate attributes`,
-        false,
-        {
-          id: 'ember-data:Model.data',
-          until: '3.9',
-        }
-      );
-      return recordDataFor(this)._data;
-    },
-  });
-}
-
 if (DEPRECATE_MODEL_TOJSON) {
   /**
     Use [JSONSerializer](JSONSerializer.html) to
