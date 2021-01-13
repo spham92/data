@@ -8377,8 +8377,7 @@ eslint-module-utils@^2.6.0:
     pkg-dir "^2.0.0"
 
 "eslint-plugin-ember-data@link:./packages/unpublished-eslint-rules":
-  version "0.0.0"
-  uid ""
+  version "3.26.0-alpha.0"
 
 eslint-plugin-ember@^8.5.1:
   version "8.13.0"
