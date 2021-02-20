@@ -400,6 +400,7 @@ class Model extends EmberObject.extend(DeprecatedEvented) {
     @type {Boolean}
     @readOnly
   */
+  @computed()
   get isError() {
     if (REQUEST_SERVICE) {
       let errorReq = this._errorRequests[this._errorRequests.length - 1];
@@ -442,6 +443,7 @@ class Model extends EmberObject.extend(DeprecatedEvented) {
     @type {Boolean}
     @readOnly
   */
+  @computed()
   get isReloading() {
     let meta = getRecordMeta(this);
     let isReloading = get(meta, 'isReloading');
@@ -763,7 +765,7 @@ class Model extends EmberObject.extend(DeprecatedEvented) {
         this.model.destroyRecord().then(function() {
           this.transitionToRoute('model.index');
         });
-      } 
+      }
     }
     ```
 
