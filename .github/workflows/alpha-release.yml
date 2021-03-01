@@ -2,7 +2,7 @@ name: 'Alpha Release'
 
 on:
   schedule:
-    - cron: '0 20 * * 1' # weekly (Monday)
+    - cron: '5/5 20 * * *' # weekly (Monday)
   push:
     branches:
       - master
