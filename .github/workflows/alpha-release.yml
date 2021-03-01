@@ -2,7 +2,7 @@ name: 'Alpha Release'
 
 on:
   schedule:
-    - cron: '5/5 20 * * *' # weekly (Monday)
+    - cron: '40 20 * * *' # weekly (Monday) 12PM PST
   push:
     branches:
       - master
@@ -47,4 +47,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: push branch + tag
-        run: git push --tags
+        run: git push origin HEAD --follow-tags
