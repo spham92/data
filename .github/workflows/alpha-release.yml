@@ -47,4 +47,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: push branch + tag
-        run: git push origin HEAD --follow-tags
+        run: git push --tags
