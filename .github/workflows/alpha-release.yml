@@ -28,6 +28,7 @@ jobs:
   release:
     name: Run publish script
     runs-on: ubuntu-latest
+    if: false == contains(github.ref, '-alpha.')
     needs: [ test ]
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +38,10 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies for master
         run: yarn install --frozen-lockfile --non-interactive
+      - name: Make sure git user is setup
+        run: |
+          git config --local user.email 'cron@example.com'
+          git config --local user.name 'Ember Data Cron CI'
       - name: publish with script
         run: node bin/publish.js canary
         env:
