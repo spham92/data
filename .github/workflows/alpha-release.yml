@@ -34,8 +34,10 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install dependencies for master
         run: yarn install --frozen-lockfile --non-interactive
+      - name: get next alpha version
+        run: NEXT_VERSION=$(node bin/determine-next-alpha-version.js)
       - name: publish with script
-        run: node bin/publish.js canary
+        run: node bin/publish.js --distTag=NEXT_VERSION
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: push branch + tag
