@@ -44,7 +44,7 @@ jobs:
           git config --local user.email 'cron@example.com'
           git config --local user.name 'Ember Data Cron CI'
       - name: publish with script
-        run: node bin/publish.js --useVersion=NEXT_VERSION
+        run: node bin/publish.js canary --useVersion=NEXT_VERSION
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: push branch + tag
