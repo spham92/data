@@ -2,7 +2,10 @@ name: 'Alpha Release'
 
 on:
   schedule:
-    - cron: '0 20 * * 1' # weekly (Monday) 12 PM PST
+    - cron: '10/10 * * * *' # weekly (Monday) 12PM PST
+  push:
+    branches:
+      - master
 
 jobs:
   test:
@@ -36,6 +39,10 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
       - name: get next alpha version
         run: NEXT_VERSION=$(node bin/determine-next-alpha-version.js)
+      - name: Make sure git user is setup
+        run: |
+          git config --local user.email 'cron@example.com'
+          git config --local user.name 'Ember Data Cron CI'
       - name: publish with script
         run: node bin/publish.js --distTag=NEXT_VERSION
         env:
