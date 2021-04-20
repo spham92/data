@@ -95,7 +95,7 @@ Twitter the Crosslinking the announcement to the following Discord channels.
 3. Publish the LTS
 
     ```
-    node ./bin/publish.js lts
+    node ./bin/publish/local.js lts
     ```
 
 4. Update the Release Notes on Github
@@ -184,7 +184,7 @@ Twitter the Crosslinking the announcement to the following Discord channels.
 5. Publish the release
 
     ```
-    node ./bin/publish.js release
+    node ./bin/publish/local.js release
     ```
 
 6. Update the Release Notes on Github
@@ -249,7 +249,7 @@ Twitter the Crosslinking the announcement to the following Discord channels.
 3. Publish the weekly beta
 
     ```
-    node ./bin/publish.js beta
+    node ./bin/publish/local.js beta
     ```
 
 4. Update the Release Notes on Github
@@ -278,19 +278,26 @@ Twitter the Crosslinking the announcement to the following Discord channels.
     a. If this is the very first `canary` release for a new minor
 
       ```
-      node ./bin/publish.js canary --bumpMinor
+      node ./bin/publish/local.js canary --bumpMinor
       ```
 
     b. If this is the very first `canary` release for a new major
 
       ```
-      node ./bin/publish.js canary --bumpMajor
+      node ./bin/publish/local.js canary --bumpMajor
       ```
 
     c. For all other "nightly" canary releases
 
       ```
-      node ./bin/publish.js canary
+      node ./bin/publish/local.js canary
       ```
 
 Congrats, you are finished!
+
+#### Canary Auto Publish
+New canary versions are published to npm every Wednesday at 12pm PST by the `Alpha Release` GitHub action. Depending on the
+current latest versions returned by `npm view ember-data versions --json`, the next version chosen will be:
+1. If current version is a minor version release such as `3.15.0`, the version picked for the next alpha is `3.15.1-alpha.0`
+2. If current version is an alpha release such as `3.15.1-alpha.0`, the version picked for the next alpha is `3.15.1-alpha.1`
+3. If there exists a beta release with a higher release version than the latest alpha, the alpha versioning will restart with that release.
