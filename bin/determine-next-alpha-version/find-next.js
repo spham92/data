@@ -12,7 +12,7 @@ function execWithLog(command) {
   return execa.sync(command, { shell: true, preferLocal: true }).stdout;
 }
 
-async function findNext() {
+function findNext() {
   const versionsJSON = execWithLog('npm view ember-data versions --json');
   // [
   //   "3.25.0"
