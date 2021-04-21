@@ -123,18 +123,18 @@ function assertGitIsClean(options) {
     if (options.force) {
       console.log(
         chalk.white('⚠️ ⚠️ ⚠️  Local Git branch has uncommitted changes!\n\t') +
-          chalk.yellow('Passed option: ') +
-          chalk.white('--force') +
-          chalk.grey(' :: ignoring unclean git working tree')
+        chalk.yellow('Passed option: ') +
+        chalk.white('--force') +
+        chalk.grey(' :: ignoring unclean git working tree')
       );
     } else {
       console.log(
         chalk.red('💥 Git working tree is not clean. 💥 \n\t') +
-          chalk.grey('Use ') +
-          chalk.white('--force') +
-          chalk.grey(' to ignore this warning and publish anyway\n') +
-          chalk.yellow('⚠️  Publishing from an unclean working state may result in a broken release ⚠️\n\n') +
-          chalk.grey(`Status:\n${status}`)
+        chalk.grey('Use ') +
+        chalk.white('--force') +
+        chalk.grey(' to ignore this warning and publish anyway\n') +
+        chalk.yellow('⚠️  Publishing from an unclean working state may result in a broken release ⚠️\n\n') +
+        chalk.grey(`Status:\n${status}`)
       );
       process.exit(1);
     }
@@ -144,18 +144,18 @@ function assertGitIsClean(options) {
     if (options.force) {
       console.log(
         chalk.white('⚠️ ⚠️ ⚠️  Local Git branch is not in sync with origin branch') +
-          chalk.yellow('\n\tPassed option: ') +
-          chalk.white('--force') +
-          chalk.grey(' :: ignoring unsynced git branch')
+        chalk.yellow('\n\tPassed option: ') +
+        chalk.white('--force') +
+        chalk.grey(' :: ignoring unsynced git branch')
       );
     } else {
       console.log(
         chalk.red('💥 Local Git branch is not in sync with origin branch. 💥 \n\t') +
-          chalk.grey('Use ') +
-          chalk.white('--force') +
-          chalk.grey(' to ignore this warning and publish anyway\n') +
-          chalk.yellow('⚠️  Publishing from an unsynced working state may result in a broken release ⚠️') +
-          chalk.grey(`Status:\n${status}`)
+        chalk.grey('Use ') +
+        chalk.white('--force') +
+        chalk.grey(' to ignore this warning and publish anyway\n') +
+        chalk.yellow('⚠️  Publishing from an unsynced working state may result in a broken release ⚠️') +
+        chalk.grey(`Status:\n${status}`)
       );
       process.exit(1);
     }
@@ -177,19 +177,19 @@ function assertGitIsClean(options) {
         chalk.white(
           `⚠️ ⚠️ ⚠️  Expected to publish npm tag ${options.distTag} from the git branch ${expectedChannelBranch}, but found ${foundBranch}`
         ) +
-          chalk.yellow('\n\tPassed option: ') +
-          chalk.white('--force') +
-          chalk.grey(' :: ignoring unexpected branch')
+        chalk.yellow('\n\tPassed option: ') +
+        chalk.white('--force') +
+        chalk.grey(' :: ignoring unexpected branch')
       );
     } else {
       console.log(
         chalk.red(
           `💥 Expected to publish npm tag ${options.distTag} from the git branch ${expectedChannelBranch}, but found ${foundBranch} 💥 \n\t`
         ) +
-          chalk.grey('Use ') +
-          chalk.white('--force') +
-          chalk.grey(' to ignore this warning and publish anyway\n') +
-          chalk.yellow('⚠️  Publishing from an incorrect branch may result in a broken release ⚠️')
+        chalk.grey('Use ') +
+        chalk.white('--force') +
+        chalk.grey(' to ignore this warning and publish anyway\n') +
+        chalk.yellow('⚠️  Publishing from an incorrect branch may result in a broken release ⚠️')
       );
       process.exit(1);
     }
@@ -283,9 +283,9 @@ function packAllPackages() {
           if (pkgInfo.scripts.prepublish || pkgInfo.scripts.prepare) {
             console.log(
               `⚠️ ` +
-                chalk.grey(
-                  `${pkgInfo.name} has both a 'prepublishOnly' and either 'prepare' or 'publish' scripts. Running prepublishOnly manually before instead of after publish and prepare. See https://github.com/npm/npm/issues/15363`
-                )
+              chalk.grey(
+                `${pkgInfo.name} has both a 'prepublishOnly' and either 'prepare' or 'publish' scripts. Running prepublishOnly manually before instead of after publish and prepare. See https://github.com/npm/npm/issues/15363`
+              )
             );
           }
           execWithLog(`cd ${pkgDir} && npm run prepublishOnly`);
@@ -328,21 +328,25 @@ function publishPackage(distTag, tarball, otp) {
 async function confirmPublish(tarballs, options, promptOtp = true) {
   let otp;
 
-  if (promptOtp) {
+  if (promptOtp && !options.dryRun) {
     otp = await getOTPToken();
   }
 
   for (let tarball of tarballs) {
-    try {
-      publishPackage(options.distTag, tarball, otp);
-    } catch (e) {
-      // the token is outdated, we need another one
-      if (e.message.includes('E401') || e.message.includes('EOTP')) {
-        otp = await getOTPToken();
-
+    if (options.dryRun) {
+      console.log('Would have published', tarball, 'with tag', options.distTag);
+    } else {
+      try {
         publishPackage(options.distTag, tarball, otp);
-      } else {
-        throw e;
+      } catch (e) {
+        // the token is outdated, we need another one
+        if (e.message.includes('E401') || e.message.includes('EOTP')) {
+          otp = await getOTPToken();
+
+          publishPackage(options.distTag, tarball, otp);
+        } else {
+          throw e;
+        }
       }
     }
   }
